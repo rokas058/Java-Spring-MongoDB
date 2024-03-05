@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import mongodb.project.entity.Student;
 import mongodb.project.entity.dto.student.StudentRequestDto;
 import mongodb.project.entity.dto.student.StudentDto;
-import mongodb.project.exceptions.StudentNotFoundException;
+import mongodb.project.exception.StudentNotFoundException;
 import mongodb.project.mapper.StudentMapper;
 import mongodb.project.repository.StudentRepository;
 import org.springframework.stereotype.Service;
@@ -21,8 +21,8 @@ public class StudentService {
     @Transactional
     public StudentDto createStudent(StudentRequestDto studentDto) {
         Student student = StudentMapper.toStudent(studentDto);
-        repository.save(student);
-        return StudentMapper.toStudentDto(student);
+        Student studentSave = repository.save(student);
+        return StudentMapper.toStudentDto(studentSave);
     }
 
     public List<StudentDto> getStudents() {
@@ -37,6 +37,7 @@ public class StudentService {
                 .map(StudentMapper::toStudentDto)
                 .orElseThrow(() -> new StudentNotFoundException(id));
     }
+
     @Transactional
     public StudentDto updateStudent(String id, StudentRequestDto studentDto) {
         Student existStudent = repository.findById(id).orElseThrow(() -> new StudentNotFoundException(id));
@@ -44,6 +45,7 @@ public class StudentService {
         repository.save(student);
         return StudentMapper.toStudentDto(student);
     }
+
     @Transactional
     public void deleteStudent(String id) {
         Student student = repository.findById(id).orElseThrow(() -> new StudentNotFoundException(id));
