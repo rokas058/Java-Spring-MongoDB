@@ -28,6 +28,7 @@ public class Book {
     private LocalDate givenDate;
     @NotNull
     private LocalDate returnDate;
+    @NotNull
     @Field("student_id")
     @DocumentReference
     private Student student;
